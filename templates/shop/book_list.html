@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookStore — Книжный интернет-магазин</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-orange: #ff6b00;
+            --primary-orange-hover: #e56000;
+            --dark-header: #1e1e24;
+            --bg-light: #f6f7f9;
+            --card-bg: #ffffff;
+            --text-main: #2b2b2b;
+            --text-muted: #7e7e7e;
+            --border-color: #eaedf1;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        .main-header {
+            background: #ffffff;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .brand-logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #000;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-badge {
+            background: var(--primary-orange);
+            color: white;
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 6px;
+            vertical-align: super;
+        }
+
+        .promo-banner {
+            background: linear-gradient(135deg, #1b1625 0%, #342845 100%);
+            border-radius: 20px;
+            color: white;
+            padding: 40px;
+            margin: 25px 0 40px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-weight: 800;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .tag-pill {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 18px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+
+        .tag-pill:hover, .tag-pill.active {
+            border-color: var(--primary-orange);
+            color: var(--primary-orange);
+            background: #fff6f0;
+        }
+
+        .book-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            position: relative;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+        }
+
+        .book-cover {
+            background: #f9fafb;
+            height: 260px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .book-cover img {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+            border-radius: 4px;
+        }
+
+        .discount-badge {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: #ff3b30;
+            color: white;
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        .fav-btn-top {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255,255,255,0.9);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff3b30;
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .book-details {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .book-price-block {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-top: auto;
+            padding-top: 12px;
+        }
+
+        .current-price {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #000;
+        }
+
+        .btn-orange {
+            background: var(--primary-orange);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 600;
+            width: 100%;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            margin-top: 12px;
+            transition: background 0.2s, background-color 0.2s;
+        }
+
+        .btn-orange:hover {
+            background: var(--primary-orange-hover);
+            color: white;
+        }
+
+        .btn-orange.added-success {
+            background-color: #198754 !important;
+        }
+
+        .genre-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            height: 100%;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            cursor: pointer;
+        }
+
+        .genre-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        }
+
+        .genre-icon {
+            font-size: 2rem;
+            color: var(--primary-orange);
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <div class="row align-items-center g-3">
+                <div class="col-auto">
+                    <a href="{% url 'book_list' %}" class="brand-logo">
+                        BOOKSTORE <span class="brand-badge">PRO</span>
+                    </a>
+                </div>
+
+                <div class="col">
+                    <form method="GET" action="{% url 'book_list' %}" class="position-relative">
+                        <input type="text" name="q" class="form-control rounded-pill ps-4 pe-5" placeholder="Название книги, автор, жанр..." value="{{ query }}" style="height: 48px;">
+                        <button type="submit" class="btn position-absolute end-0 top-0 bottom-0 pe-3 text-muted border-0">
+                            <i class="fa-solid fa-magnifying-glass fs-5"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="col-auto d-flex gap-3 align-items-center">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'favorites_list' %}" class="btn btn-light rounded-circle p-2" style="width: 44px; height: 44px;">
+                            <i class="fa-regular fa-heart fs-5"></i>
+                        </a>
+                        <a href="{% url 'cart_detail' %}" class="btn btn-light rounded-circle p-2 position-relative" style="width: 44px; height: 44px;">
+                            <i class="fa-solid fa-bag-shopping fs-5"></i>
+                        </a>
+                        <span class="small fw-semibold ms-1"><i class="fa-regular fa-user me-1"></i>{{ user.username }}</span>
+                        <a href="/accounts/logout/" class="btn btn-outline-danger btn-sm rounded-pill ms-2">Выйти</a>
+                    {% else %}
+                        <a href="/accounts/login/" class="btn btn-outline-dark rounded-pill px-4">Войти</a>
+                        <a href="/accounts/signup/" class="btn btn-dark rounded-pill px-4">Регистрация</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container py-4">
+        <div class="promo-banner d-flex justify-content-between align-items-center">
+            <div style="max-width: 550px;">
+                <span class="badge bg-warning text-dark mb-2 fw-bold">ПРЕДЗАКАЗ</span>
+                <h1 class="fw-extrabold mb-3" style="font-size: 2.3rem;">Главные бестселлеры и горячие новинки сезона</h1>
+                <p class="opacity-75 mb-4">Читайте первыми лучшие произведения от знаменитых авторов со всего мира.</p>
+                <a href="#books-catalog" class="btn btn-warning rounded-pill px-4 py-2 fw-bold text-dark">Смотреть каталог</a>
+            </div>
+            <i class="fa-solid fa-book-journal-whills fa-10x text-white opacity-25 d-none d-lg-block"></i>
+        </div>
+
+        <div id="books-catalog" class="pt-3">
+            <h2 class="section-title">Новинки</h2>
+
+            <div class="d-flex gap-2 flex-wrap mb-4">
+                <a href="{% url 'book_list' %}" class="tag-pill {% if not request.GET.genre and not selected_genre_name %}active{% endif %}">Все направления</a>
+                {% for g in genres %}
+                    <a href="?genre={{ g.id }}#books-catalog" class="tag-pill {% if request.GET.genre == g.id|stringformat:'s' %}active{% endif %}">{{ g.name }}</a>
+                {% endfor %}
+            </div>
+
+            <!-- Сетка книг -->
+            <div class="row g-4 mb-5">
+                {% for book in books %}
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="book-card">
+                        <div class="book-cover">
+                            {% if user.is_authenticated %}
+                            <a href="{% url 'toggle_favorite' book.id %}" class="fav-btn-top js-toggle-favorite">
+                                {% if book.id in fav_ids %}
+                                    <i class="fa-solid fa-heart"></i>
+                                {% else %}
+                                    <i class="fa-regular fa-heart"></i>
+                                {% endif %}
+                            </a>
+                            {% endif %}
+
+                            {% if book.image %}
+                                <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                            {% else %}
+                                <i class="fa-solid fa-book fa-4x text-muted opacity-25"></i>
+                            {% endif %}
+
+                            <span class="discount-badge">-15%</span>
+                        </div>
+
+                        <div class="book-details">
+                            <span class="text-muted small mb-1">{{ book.author.name }}</span>
+                            <div class="fw-bold text-dark mb-1" style="font-size: 1.05rem; line-height: 1.3;">{{ book.title }}</div>
+                            <div class="text-muted small mb-2">{{ book.cover_type }}</div>
+
+                            <div class="book-price-block">
+                                <span class="current-price">${{ book.price }}</span>
+                            </div>
+
+                            <a href="{% url 'add_to_cart' book.id %}" class="btn-orange js-add-to-cart">
+                                <i class="fa-solid fa-bag-shopping me-2"></i> В корзину
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <h4 class="text-muted">Книги по вашему запросу не найдены</h4>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Популярные жанры -->
+        <div class="my-5">
+            <h2 class="section-title">Популярные жанры</h2>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <a href="{% url 'book_list' %}?genre_name=Детективы#books-catalog" class="text-decoration-none text-dark">
+                        <div class="genre-card">
+                            <div class="genre-icon"><i class="fa-solid fa-user-ninja"></i></div>
+                            <h5 class="fw-bold">Детективы</h5>
+                            <ul class="list-unstyled small text-muted mb-0">
+                                <li>• — это литературный и кинематографический жанр, произведения которого посвящены процессу расследования загадочного происшествия (чаще всего преступления) с целью выяснения его обстоятельств и установления виновных.</li>
+
+                            </ul>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="{% url 'book_list' %}?genre_name=Психология#books-catalog" class="text-decoration-none text-dark">
+                        <div class="genre-card">
+                            <div class="genre-icon"><i class="fa-solid fa-brain"></i></div>
+                            <h5 class="fw-bold">Психология</h5>
+                            <ul class="list-unstyled small text-muted mb-0">
+                                <li>• — это область, изучающая закономерности возникновения, развития и функционирования психики и психической деятельности человека. Он объединяет гуманитарный и естественно-научный подходы и включает в себя практическую психологию, которая применяет знания на практике. В литературе жанр психология исследует внутренний мир человека, его эмоции и поведение, позволяя читателям глубже понимать себя и окружающих.</li>
+
+                            </ul>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="{% url 'book_list' %}?genre_name=Фэнтези#books-catalog" class="text-decoration-none text-dark">
+                        <div class="genre-card">
+                            <div class="genre-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                            <h5 class="fw-bold">Фэнтези</h5>
+                            <ul class="list-unstyled small text-muted mb-0">
+                                <li>• — это жанр современной художественной литературы, кино, игр и других видов искусства, который изображает миры и события, невозможные в реальности, с опорой на магические и сверхъестественные элементы, мифы и легенды. Это отличает фэнтези от научной фантастики и других разновидностей фантастической литературы.</li>
+                            </ul>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="{% url 'book_list' %}?genre_name=Бизнес#books-catalog" class="text-decoration-none text-dark">
+                        <div class="genre-card">
+                            <div class="genre-icon"><i class="fa-solid fa-briefcase"></i></div>
+                            <h5 class="fw-bold">Бизнес</h5>
+                            <ul class="list-unstyled small text-muted mb-0">
+                                <li>• — это деятельность, направленная на получение прибыли за счёт производства или продажи товаров и услуг. Человека, который занимается бизнесом, называют бизнесменом или предпринимателем. Важно отметить, что бизнес не только охватывает создание прибыли, но и включает в себя удовлетворение потребностей людей и создание ценности для клиентов.</li>
+
+                            </ul>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Скрипты асинхронного взаимодействия (Корзина и Избранное) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- 1. Асинхронная корзина ---
+            const cartButtons = document.querySelectorAll('.js-add-to-cart');
+            cartButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetUrl = this.getAttribute('href');
+
+                    fetch(targetUrl, {
+                        method: 'GET',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => {
+                        if (response.status === 401) {
+                            window.location.href = '/accounts/login/';
+                            return;
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data && data.status === 'ok') {
+                            const originalContent = button.innerHTML;
+                            button.innerHTML = '<i class="fa-solid fa-check me-2"></i> Добавлено!';
+                            button.classList.add('added-success');
+
+                            setTimeout(() => {
+                                button.innerHTML = originalContent;
+                                button.classList.remove('added-success');
+                            }, 1500);
+                        }
+                    })
+                    .catch(err => console.error('Ошибка при добавлении в корзину:', err));
+                });
+            });
+
+            // --- 2. Асинхронное избранное ---
+            const favButtons = document.querySelectorAll('.js-toggle-favorite');
+            favButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetUrl = this.getAttribute('href');
+                    const icon = this.querySelector('i');
+
+                    fetch(targetUrl, {
+                        method: 'GET',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => {
+                        if (response.status === 401) {
+                            window.location.href = '/accounts/login/';
+                            return;
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data && data.status === 'ok') {
+                            if (data.is_favorite) {
+                                icon.className = 'fa-solid fa-heart';
+                            } else {
+                                icon.className = 'fa-regular fa-heart';
+                            }
+                        }
+                    })
+                    .catch(err => console.error('Ошибка при изменении избранного:', err));
+                });
+            });
+        });
+    </script>
+</body>
+</html>

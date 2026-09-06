@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход — BookStore PRO</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-orange: #ff6b00;
+            --primary-orange-hover: #e56000;
+            --bg-light: #f6f7f9;
+            --text-main: #2b2b2b;
+            --border-color: #eaedf1;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-card {
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            padding: 40px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+        }
+
+        .brand-logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #000;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-badge {
+            background: var(--primary-orange);
+            color: white;
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 6px;
+            vertical-align: super;
+        }
+
+        .form-control {
+            border-radius: 12px;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            background-color: #f9fafb;
+            font-size: 0.95rem;
+        }
+
+        .form-control:focus {
+            background-color: #ffffff;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.1);
+        }
+
+        .btn-orange {
+            background: var(--primary-orange);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 600;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .btn-orange:hover {
+            background: var(--primary-orange-hover);
+            color: white;
+        }
+
+        .link-orange {
+            color: var(--primary-orange);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .link-orange:hover {
+            text-decoration: underline;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary-orange);
+            border-color: var(--primary-orange);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <!-- Логотип -->
+        <div class="text-center mb-4">
+            <a href="{% url 'book_list' %}" class="brand-logo">
+                BOOKSTORE <span class="brand-badge">PRO</span>
+            </a>
+            <h4 class="fw-bold mt-3 mb-1">Добро пожаловать!</h4>
+            <p class="text-muted small">Войдите в аккаунт, чтобы продолжить</p>
+        </div>
+
+        <!-- Форма входа -->
+        <form method="post">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger py-2 small rounded-3 mb-3">
+                    Имя пользователя или пароль введены неверно.
+                </div>
+            {% endif %}
+
+            <!-- Имя пользователя -->
+            <div class="mb-3">
+                <label for="id_username" class="form-label small fw-semibold">Имя пользователя</label>
+                <input type="text" name="username" autofocus required id="id_username" class="form-control" placeholder="Введите ваш логин">
+            </div>
+
+            <!-- Пароль -->
+            <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <label for="id_password" class="form-label small fw-semibold mb-0">Пароль</label>
+                    {% if user.has_usable_password %}
+                        <a href="{% url 'password_reset' %}" class="small link-orange">Забыли пароль?</a>
+                    {% endif %}
+                </div>
+                <input type="password" name="password" required id="id_password" class="form-control" placeholder="••••••••">
+            </div>
+
+            <!-- Запомнить меня -->
+            <div class="mb-4 form-check">
+                <input type="checkbox" name="remember_me" class="form-check-input" id="id_remember">
+                <label class="form-check-label small text-muted" for="id_remember">Запомнить меня</label>
+            </div>
+
+            <!-- Кнопка входа -->
+            <button type="submit" class="btn btn-orange mb-3">Войти</button>
+        </form>
+
+        <!-- Ссылка на регистрацию -->
+        <div class="text-center pt-3 border-top">
+            <span class="small text-muted">Ещё нет аккаунта?</span>
+            <a href="/accounts/signup/" class="small link-orange fw-bold ms-1">Зарегистрируйтесь</a>
+        </div>
+    </div>
+
+</body>
+</html>
