@@ -5,11 +5,15 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-local-development-key')
+
 DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
 render_host = os.environ.get('RENDER_EXTERNAL_HOSTNAME', '')
+
 configured_hosts = os.environ.get('ALLOWED_HOSTS', '')
+
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
 ALLOWED_HOSTS += [host.strip() for host in configured_hosts.split(',') if host.strip()]
 if render_host:
     ALLOWED_HOSTS.append(render_host)
